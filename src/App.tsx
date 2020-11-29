@@ -1,12 +1,12 @@
 import React from 'react';
-import Characters from './components/characters';
-import SearchBar from './components/search';
+import CharacterList from './components/Character-list';
+import SearchBar from './components/Search';
 
 
 const App : React.FC = () =>{
   return <div>
     <SearchBar />
-    <Characters />
+    <CharacterList />
   </div>
 }
 
