@@ -3,29 +3,34 @@ import marvel from '../api/api';
 import {hashKey} from '../api/Hash';
 import {PRIVATEKEY, PUBLICKEY} from '../api/Keys';
 
+interface Char {
+    name:string,
+}
 
 const SearchBar : React.FC = () =>{
-    const [term, setTerm] = useState('');
+    const [term, setTerm] = useState<string | null>(null);
+    const [results, setResults] = useState([]);
     useEffect(()=>{
         console.log(term)
 
         const search = async () =>{
             const ts = Date.now();
             const hash = hashKey(ts,PRIVATEKEY,PUBLICKEY);
-            const data = await marvel.get('https://gateway.marvel.com/v1/public/characters', {
+            const {data} = await marvel.get('/characters', {
                params : {
-                apikey: '304f21ac8fb3db8db0ec69dd213191ea',
+                apikey: PUBLICKEY,
                 ts,
                 hash,
                 limit: 20,
-                name:'deadpool'
+                name:term
                }
            });
+
 
            console.log(data)
         }
 
-        if(term!==""){
+        if(term){
             search();
         }
 
