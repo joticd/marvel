@@ -1,17 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import marvel from '../api/api';
-import {hashKey} from '../api/Hash';
-import {PRIVATEKEY, PUBLICKEY} from '../api/Keys';
+import { hashKey } from '../api/Hash';
+import { PRIVATEKEY, PUBLICKEY } from '../api/Keys';
+
+interface ComicItems {
+    comicName:string,
+    comicUrl:string
+}
 
 interface Char {
-    name:string,
+    charName:string,
+    comicItems:ComicItems[]    
 }
 
 const SearchBar : React.FC = () =>{
     const [term, setTerm] = useState<string | null>(null);
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState(null);
     useEffect(()=>{
-        console.log(term)
 
         const search = async () =>{
             const ts = Date.now();
@@ -26,8 +31,12 @@ const SearchBar : React.FC = () =>{
                }
            });
 
+           const apiResults = data.data.results[0];
+           const _items = apiResults.comics.items;
+           let charName : string = apiResults.name;
 
-           console.log(data)
+
+           console.log(_items)
         }
 
         if(term){
