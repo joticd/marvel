@@ -5,7 +5,7 @@ export default axios.create({
 });
 
 export const getComicUrl : any=  async (url:string, apikey:string, ts:number, hash:string) =>{
-    const data = await axios.get(url, {
+    const {data} = await axios.get(url, {
         params : {
          apikey,
          ts,
@@ -13,7 +13,7 @@ export const getComicUrl : any=  async (url:string, apikey:string, ts:number, ha
         }
     });
 
-    console.log(data)
+    return data;
 }
 
 

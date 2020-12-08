@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import marvel, {getComicUrl} from '../api/api';
+import marvel from '../api/api';
 import { hashKey } from '../api/Hash';
 import { PRIVATEKEY, PUBLICKEY } from '../api/Keys';
-import {createItemsArray} from '../functions/Functions';
+import { loopComics } from '../functions/Functions';
 
 interface ComicItems {
     comicName:string,
-    comicUrl:string
+    comicImage:string
 }
 
 interface ComicType {
@@ -14,10 +14,22 @@ interface ComicType {
     comicItems:ComicItems[]    
 }
 
+const getApiResults = async (apiResults:any, debouncedTerm:string |  null, ts:number, hash:string, stateSet: React.Dispatch<React.SetStateAction<ComicType | null>>) =>{
+    if(apiResults && debouncedTerm){
+        const _items:[] = apiResults.comics.items;
+        const comicItems:ComicItems[] = await loopComics(_items, PUBLICKEY, ts, hash);
+        const charName:string = debouncedTerm;
+        stateSet({charName, comicItems});         
+    }
+}
+
 const SearchBar : React.FC = () =>{
     const [term, setTerm] = useState<string | null>(null);
     const [debouncedTerm, setDebouncedTerm] = useState<string | null>(null);
     const [results, setResults] = useState<ComicType | null>(null);
+    useEffect(()=>{
+        console.log(results)
+    }, [results]);
     useEffect(()=>{
         const timer = setTimeout(()=>{
             setDebouncedTerm(term);      
@@ -39,17 +51,9 @@ const SearchBar : React.FC = () =>{
                 limit: 20,
                 name:debouncedTerm
                }
-           });
-
-           const apiResults = data.data.results[0];
-           if(apiResults && debouncedTerm){
-               const _items:[] = apiResults.comics.items;
-               const charName:string = apiResults.name;
-               const comicItems:ComicItems[] = createItemsArray(_items);
-               console.log(debouncedTerm, charName, comicItems) 
-               getComicUrl(comicItems[0].comicUrl, PUBLICKEY, ts, hash )
-               setResults({charName, comicItems});              
-            }
+            });
+            const apiResults = data.data.results[0];
+            getApiResults(apiResults, debouncedTerm, ts, hash, setResults);            
         };
 
         
