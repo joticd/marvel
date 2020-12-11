@@ -14,6 +14,10 @@ interface ComicType {
     comicItems:ComicItems[]    
 }
 
+interface Props {
+    onChangeTerm:React.Dispatch<React.SetStateAction<ComicType | null>>
+}
+
 const getApiResults = async (apiResults:any, debouncedTerm:string |  null, ts:number, hash:string, stateSet: React.Dispatch<React.SetStateAction<ComicType | null>>) =>{
     if(apiResults && debouncedTerm){
         const _items:[] = apiResults.comics.items;
@@ -23,13 +27,11 @@ const getApiResults = async (apiResults:any, debouncedTerm:string |  null, ts:nu
     }
 }
 
-const SearchBar : React.FC = () =>{
+const SearchBar : React.FC<Props> = ({onChangeTerm}) =>{
     const [term, setTerm] = useState<string | null>(null);
     const [debouncedTerm, setDebouncedTerm] = useState<string | null>(null);
-    const [results, setResults] = useState<ComicType | null>(null);
-    useEffect(()=>{
-        console.log(results)
-    }, [results]);
+   
+    
     useEffect(()=>{
         const timer = setTimeout(()=>{
             setDebouncedTerm(term);      
@@ -53,7 +55,7 @@ const SearchBar : React.FC = () =>{
                }
             });
             const apiResults = data.data.results[0];
-            getApiResults(apiResults, debouncedTerm, ts, hash, setResults);            
+            getApiResults(apiResults, debouncedTerm, ts, hash, onChangeTerm);            
         };
 
         
