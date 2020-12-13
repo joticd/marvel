@@ -2,26 +2,32 @@ import React from 'react';
 import Character from './Character';
 
 interface ComicItems {
-    comicName:string,
-    comicImage:string
-  }
-  
-  interface ComicType {
-    charName:string,
-    comicItems:ComicItems[]    
-  }
+  comicName:string,
+  comicImage:string
+}
+
+interface ComicType {
+  charName:string,
+  comicItems:ComicItems[]    
+}
 
 interface Props {
     results : ComicType | null
 }
+
+const getCard = ({charName, comicItems}:ComicType) :JSX.Element[]=> {
+  const cards = comicItems.map((element, index) => {
+    return <Character key={index} charName ={charName} comicItems={element}/>
+  });
+  return cards;
+}
 const CharacterList : React.FC<Props | null> = ({results}) =>{
-    console.log(results);
+    const card = results ? getCard(results) : null;
+  
     return <div>
         CharacterList
-        <div className="ui stackable grid">
-          <div className="sixteen wide mobile eight wide tablet four wide computer column">
-            <Character />
-          </div>
+        <div className="ui stackable grid">          
+          {card}          
         </div>
         
     </div>
