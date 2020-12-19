@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Character from './Character';
 
 interface ComicItems {
   comicName:string,
-  comicImage:string
+  comicImage:string,
+  comicID:number
 }
 
 interface ComicType {
@@ -11,18 +12,32 @@ interface ComicType {
   comicItems:ComicItems[]    
 }
 
+interface ComicItemsType {
+  charName:string,
+  comicName:string,
+  comicImage:string,
+  comicID:number,
+  isBooked:boolean
+}
+
 interface Props {
     results : ComicType | null
 }
 
-const getCard = ({charName, comicItems}:ComicType) :JSX.Element[]=> {
-  const cards = comicItems.map((element, index) => {
-    return <Character key={index} charName ={charName} comicItems={element}/>
+const getCard = ({charName, comicItems}:ComicType, setBookedItem:React.Dispatch<React.SetStateAction<ComicItemsType | null>>) :JSX.Element[]=> {
+  const cards = comicItems.map((element, index) => {    
+    return <Character key={element.comicID} charName ={charName} coomicBooked={false} comicItems={element} onBooked={setBookedItem}/>
   });
   return cards;
 }
 const CharacterList : React.FC<Props | null> = ({results}) =>{
-    const card = results ? getCard(results) : null;
+
+    const [bookedItem, setBookedItem] = useState<ComicItemsType | null>(null);
+
+
+    console.log(bookedItem)
+
+    const card = results ? getCard(results, setBookedItem) : null;
   
     return <div>
         CharacterList

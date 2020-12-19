@@ -2,7 +2,8 @@ import { getComicUrl } from '../api/api';
 
 interface ComicItems {
     comicName:string,
-    comicImage:string
+    comicImage:string,
+    comicID:number
 }
 export const createItemsArray = (apiItems:[]):ComicItems[] =>{
     const items:ComicItems[] = [];
@@ -24,7 +25,9 @@ export const loopComics = async (array:any, apikey:string, ts:number, hash:strin
         const results = data.results[0];
         const comicName:string = results.title;
         const comicImage:string = `${results.thumbnail.path}.${results.thumbnail.extension}`;
-        comicItemsArray.push({comicName,comicImage});
+        const comicID:number = results.id;
+       
+        comicItemsArray.push({comicName, comicImage, comicID});
     })); 
     
     return comicItemsArray;

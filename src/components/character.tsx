@@ -1,15 +1,37 @@
 import React from 'react';
 
+interface ComicItemsType {
+    charName:string,
+    comicName:string,
+    comicImage:string,
+    comicID:number,
+    isBooked:boolean
+  }
+
 interface Props {
     charName:string,
+    coomicBooked:boolean,
     comicItems: {
         comicName:string,
-        comicImage:string
-    }    
+        comicImage:string,
+        comicID:number
+    },
+    onBooked:React.Dispatch<React.SetStateAction<ComicItemsType | null>>    
 }
 
-const Character : React.FC<Props> = ({charName, comicItems}) =>{
-    console.log(charName, comicItems)
+const bookComic = (onBooked:React.Dispatch<React.SetStateAction<ComicItemsType | null>>, info:ComicItemsType):void =>{
+    onBooked(info);
+}
+
+const Character : React.FC<Props> = ({charName, coomicBooked, comicItems, onBooked}) =>{
+    const comicInfo = {
+        charName:charName,
+        comicName:comicItems.comicName,
+        comicImage:comicItems.comicImage,
+        comicID:comicItems.comicID,
+        isBooked:coomicBooked
+    }
+
     return (
         <div className="sixteen wide mobile eight wide tablet four wide computer column">
             <div className="ui card">
@@ -21,8 +43,6 @@ const Character : React.FC<Props> = ({charName, comicItems}) =>{
                         <span className="date">Name</span>
                     </div>
                     <div className="header">{charName}</div>
-                    
-                    
                     <div className="description">
                         <div className="meta">
                             <span className="date">Title</span>
@@ -31,7 +51,10 @@ const Character : React.FC<Props> = ({charName, comicItems}) =>{
                     </div>
                 </div>
                 <div className="extra content">
-                    <i className="star outline icon"></i>
+                    <i 
+                        className={`star ${coomicBooked ? "" : "outline"} icon`}
+                        onClick={()=>bookComic(onBooked, comicInfo)}
+                    ></i>
                 </div>
             </div>
         </div>

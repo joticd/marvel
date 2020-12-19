@@ -4,7 +4,8 @@ import SearchBar from './components/Search';
 
 interface ComicItems {
   comicName:string,
-  comicImage:string
+  comicImage:string,
+  comicID:number
 }
 
 interface ComicType {

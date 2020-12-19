@@ -6,7 +6,8 @@ import { loopComics } from '../functions/Functions';
 
 interface ComicItems {
     comicName:string,
-    comicImage:string
+    comicImage:string,
+    comicID:number
 }
 
 interface ComicType {
