@@ -56,6 +56,7 @@ const SearchBar : React.FC<Props> = ({onChangeTerm}) =>{
                }
             });
             const apiResults = data.data.results[0];
+            console.log(data)
             getApiResults(apiResults, debouncedTerm, ts, hash, onChangeTerm);            
         };
 

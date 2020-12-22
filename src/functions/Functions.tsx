@@ -5,6 +5,17 @@ interface ComicItems {
     comicImage:string,
     comicID:number
 }
+
+interface ComicItemsType {
+    charName:string,
+    comicName:string,
+    comicImage:string,
+    comicID:number,
+    isBooked:boolean
+}
+
+type State = ComicItemsType[] | [];
+
 export const createItemsArray = (apiItems:[]):ComicItems[] =>{
     const items:ComicItems[] = [];
 
@@ -32,4 +43,22 @@ export const loopComics = async (array:any, apikey:string, ts:number, hash:strin
     
     return comicItemsArray;
    
+}
+
+export const bookReducer = (state:State, action:any) => {
+    const {bookedItems} = action;
+    console.log(state)  
+    switch (action.type) {
+        case "ADD_BOOK":
+            return[...state, {
+                charName: bookedItems.charName,
+                comicName: bookedItems.comicName,
+                comicImage: bookedItems.comicImage,
+                comicID: bookedItems.comicID,
+                isBooked: bookedItems.isBooked
+            }];
+    
+        default:
+            return state;
+    }
 }

@@ -16,11 +16,11 @@ interface Props {
         comicImage:string,
         comicID:number
     },
-    onBooked:React.Dispatch<React.SetStateAction<ComicItemsType | null>>    
+    onBooked:any    
 }
 
-const bookComic = (onBooked:React.Dispatch<React.SetStateAction<ComicItemsType | null>>, info:ComicItemsType):void =>{
-    onBooked(info);
+const bookComic = (onBooked:any, info:ComicItemsType):void =>{
+    onBooked({type: "ADD_BOOK", bookedItems: info});
 }
 
 const Character : React.FC<Props> = ({charName, coomicBooked, comicItems, onBooked}) =>{
