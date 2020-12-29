@@ -47,9 +47,12 @@ export const loopComics = async (array:any, apikey:string, ts:number, hash:strin
 
 export const bookReducer = (state:State, action:any) => {
     const {bookedItems} = action;
-    console.log(state)  
+
+
+    
     switch (action.type) {
         case "ADD_BOOK":
+            console.log("11111111111111",bookedItems)
             return[...state, {
                 charName: bookedItems.charName,
                 comicName: bookedItems.comicName,
@@ -57,6 +60,9 @@ export const bookReducer = (state:State, action:any) => {
                 comicID: bookedItems.comicID,
                 isBooked: bookedItems.isBooked
             }];
+        case "REMOVE_BOOK":
+            console.log("222222222222",bookedItems)
+            return state.filter(element => element.comicID !== bookedItems.comicID);
     
         default:
             return state;

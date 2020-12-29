@@ -44,9 +44,6 @@ const CharacterList : React.FC<Props | null> = ({results}) =>{
       localStorage.setItem('comics', comics)
     }, [bookedItems]);
 
-    // const [bookedItemSt, setBookedItem] = useState<ComicItemsType | null>(null);
-
-
     console.log(bookedItems)
 
     const card = results ? getCard(results, dispatch) : null;
