@@ -68,3 +68,32 @@ export const bookReducer = (state:State, action:any) => {
             return state;
     }
 }
+
+export const starClick =(setIsClicked:React.Dispatch<React.SetStateAction<boolean>>)=>{
+    
+    setIsClicked(true);    
+};
+
+export const ifClicked =(
+        isClicked:boolean, 
+        bookedBool: boolean,
+        setBooked:React.Dispatch<React.SetStateAction<boolean>>,
+        setClicked:React.Dispatch<React.SetStateAction<boolean>>
+    )=>{
+        
+    if(isClicked){
+        let bookedVal = !bookedBool;
+        setBooked(bookedVal);
+        // setClicked(false);
+    }
+};
+
+export const dispatchBook =(
+        isBooked:boolean, 
+        comicItemsType:ComicItemsType,
+        onBooked:React.Dispatch<any>  
+    )=>{
+    let type = isBooked ? "ADD_BOOK" : "REMOVE_BOOK";
+    let bookedItems = comicItemsType;
+    onBooked({type, bookedItems});
+};

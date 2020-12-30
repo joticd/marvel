@@ -26,9 +26,10 @@ interface Props {
     results : ComicType | null
 }
 
-const getCard = ({charName, comicItems}:ComicType, setBookedItem:React.Dispatch<React.SetStateAction<ComicItemsType | null>>) :JSX.Element[]=> {
-  const cards = comicItems.map((element, index) => {    
-    return <Character key={element.comicID} charName ={charName} coomicBooked={false} comicItems={element} onBooked={setBookedItem}/>
+const getCard = ({charName, comicItems}:ComicType, setBookedItem:React.Dispatch<React.SetStateAction<ComicItemsType | null>>, bookedItems:any) :JSX.Element[]=> {
+  const cards = comicItems.map((element, index) => {  
+    console.log("EEEEEEEEEEEEEEE",bookedItems)  
+    return <Character key={element.comicID} charName ={charName} coomicBooked={false} comicItems={element} onBooked={setBookedItem} />
   });
   return cards;
 }
@@ -36,17 +37,19 @@ const CharacterList : React.FC<Props | null> = ({results}) =>{
 
     const [bookedItems, dispatch] = useReducer(bookReducer, [], ()=>{
       const comicBooked = localStorage.getItem('comics');
+      console.log("BBBBBBBBBBBBBBBB",comicBooked)
       return comicBooked ? JSON.parse(comicBooked) : [];
     });
 
     useEffect(()=>{
       const comics = JSON.stringify(bookedItems);
       localStorage.setItem('comics', comics)
+      console.log("CCCCCCCCCCCCCCCCCCCC",bookedItems)
     }, [bookedItems]);
 
-    console.log(bookedItems)
+    console.log("AAAAAAAAAAAAA",bookedItems)
 
-    const card = results ? getCard(results, dispatch) : null;
+    const card = results ? getCard(results, dispatch, bookedItems) : null;
   
     return <div>
         CharacterList

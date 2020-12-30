@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import {starClick, ifClicked, dispatchBook} from '../functions/Functions';
 
-interface ComicItemsType {
-    charName:string,
-    comicName:string,
-    comicImage:string,
-    comicID:number,
-    isBooked:boolean
-  }
+// interface ComicItemsType {
+//     charName:string,
+//     comicName:string,
+//     comicImage:string,
+//     comicID:number,
+//     isBooked:boolean
+// }
 
 interface Props {
     charName:string,
@@ -16,14 +17,8 @@ interface Props {
         comicImage:string,
         comicID:number
     },
-    onBooked:any    
+    onBooked:React.Dispatch<any>    
 }
-
-const starClick =(bookedBool:boolean, setBookedBool:React.Dispatch<React.SetStateAction<boolean>>)=>{
-    let boolVal = !bookedBool;
-    console.log("BBBBBBBBBBBBBBBBBB",bookedBool) 
-    setBookedBool(boolVal);
-};
 
 const Character : React.FC<Props> = ({charName, coomicBooked, comicItems, onBooked}) =>{
     const comicInfo = {
@@ -35,13 +30,19 @@ const Character : React.FC<Props> = ({charName, coomicBooked, comicItems, onBook
     };
 
     const [bookedBool, setBookedBool] = useState<boolean>(coomicBooked);
-    
-    useEffect(()=>{
-        comicInfo.isBooked = bookedBool;
-        let reduceType = bookedBool ? "ADD_BOOK" : "REMOVE_BOOK";  
-        console.log("AAAAAAAAAAAAAAAAAA",bookedBool, reduceType) 
-        onBooked({type: reduceType, bookedItems: comicInfo});
+    const [isClicked, setIsClicked] = useState<boolean>(false);
+
+    useEffect(()=>{        
+        if(isClicked){
+            comicInfo.isBooked = bookedBool;
+            dispatchBook(bookedBool, comicInfo, onBooked);
+            setIsClicked(false);
+        }
     },[bookedBool]);
+    
+    useEffect(()=>{               
+        ifClicked(isClicked, bookedBool, setBookedBool, setIsClicked);        
+    },[isClicked]);
     return (
         <div className="sixteen wide mobile eight wide tablet four wide computer column">
             <div className="ui card">
@@ -63,7 +64,7 @@ const Character : React.FC<Props> = ({charName, coomicBooked, comicItems, onBook
                 <div className="extra content">
                     <i 
                         className={`star ${bookedBool ? "" : "outline"} icon`}
-                        onClick={()=>starClick(bookedBool, setBookedBool)}
+                        onClick={()=>starClick(setIsClicked)}
                     ></i>
                 </div>
             </div>
