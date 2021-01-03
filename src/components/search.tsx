@@ -3,28 +3,18 @@ import marvel from '../api/api';
 import { hashKey } from '../api/Hash';
 import { PRIVATEKEY, PUBLICKEY } from '../api/Keys';
 import { loopComics } from '../functions/Functions';
+import {ComicItems, ComicType} from './Interfaces';
 
-interface ComicItems {
-    comicName:string,
-    comicImage:string,
-    comicID:number
-}
-
-interface ComicType {
-    charName:string,
-    comicItems:ComicItems[]    
-}
-
-interface Props {
+type Props = {
     onChangeTerm:React.Dispatch<React.SetStateAction<ComicType | null>>
 }
 
-const getApiResults = async (apiResults:any, debouncedTerm:string |  null, ts:number, hash:string, stateSet: React.Dispatch<React.SetStateAction<ComicType | null>>) =>{
+const getApiResults = async (apiResults:any, debouncedTerm:string |  null, ts:number, hash:string, stateSet: any) =>{
     if(apiResults && debouncedTerm){
+        const charName: string = apiResults.name;
         const _items:[] = apiResults.comics.items;
-        const comicItems:ComicItems[] = await loopComics(_items, PUBLICKEY, ts, hash);
-        const charName:string = debouncedTerm;
-        stateSet({charName, comicItems});         
+        const comicItems:any = await loopComics(_items, charName , PUBLICKEY, ts, hash);
+        stateSet({comicItems});         
     }
 }
 
@@ -58,8 +48,6 @@ const SearchBar : React.FC<Props> = ({onChangeTerm}) =>{
             const apiResults = data.data.results[0];
             getApiResults(apiResults, debouncedTerm, ts, hash, onChangeTerm);            
         };
-
-        
         search();
         
     }, [debouncedTerm]);  

@@ -1,58 +1,51 @@
 import { getComicUrl } from '../api/api';
+import {ComicItems, ComicType, ComicBookType} from '../components/Interfaces';
 
-interface ComicItems {
-    comicName:string,
-    comicImage:string,
-    comicID:number
-}
+type State = ComicBookType[] | [];
 
-interface ComicItemsType {
-    charName:string,
-    comicName:string,
-    comicImage:string,
-    comicID:number,
-    isBooked:boolean
-}
-
-type State = ComicItemsType[] | [];
-
-export const createItemsArray = (apiItems:[]):ComicItems[] =>{
-    const items:ComicItems[] = [];
-
-    // apiItems.forEach((element:any) =>{
-    //     items.push({
-    //         comicName: element.name,
-    //         // comicUrl: element.resourceURI
-    //     });
-    // });
-    return items;
-}
-
-export const loopComics = async (array:any, apikey:string, ts:number, hash:string):Promise<ComicItems[]> =>{
+export const loopComics = async (array:any, name: string, apikey:string, ts:number, hash:string):Promise<ComicItems[]> =>{
     const comicItemsArray:ComicItems[] = [];  
-    
+   
     await Promise.all(array.map(async (apiData:any) => {
         const {data} = await getComicUrl(apiData.resourceURI, apikey, ts, hash);
         const results = data.results[0];
         const comicName:string = results.title;
         const comicImage:string = `${results.thumbnail.path}.${results.thumbnail.extension}`;
         const comicID:number = results.id;
-       
-        comicItemsArray.push({comicName, comicImage, comicID});
+        const charName: string = name;              
+        comicItemsArray.push({charName, comicName, comicImage, comicID});
     })); 
     
-    return comicItemsArray;
-   
+    return comicItemsArray;   
+};
+
+export const updateResults = (results: ComicType | null, bookedItems:ComicBookType[]): ComicBookType[] | null =>{
+    let updateResults : ComicBookType[] | null = null;
+    if(results){
+        updateResults=[];
+        const {comicItems}=results;
+        loopComicItems(updateResults, comicItems, bookedItems);
+    } else if(!results && bookedItems.length>0){
+        updateResults = bookedItems;
+    };
+    return updateResults;
 }
 
-export const bookReducer = (state:State, action:any) => {
-    const {bookedItems} = action;
+const loopComicItems = (updateResults : ComicBookType[], comicItems: ComicItems[], bookedItems:ComicBookType[]) =>{
+    for(let i in comicItems){
+        let isBooked = isBookedFun(comicItems[i], bookedItems);
+        updateResults.push({...comicItems[i], isBooked});
+    }
+}
 
+const isBookedFun = (element :ComicItems, bookedItems:ComicBookType[]) =>{
+    return bookedItems.some(comic => comic.comicID === element.comicID)
+}
 
-    
+export const bookReducer = (state:State, action:any):State => {
+    const {bookedItems} = action;    
     switch (action.type) {
         case "ADD_BOOK":
-            console.log("11111111111111",bookedItems)
             return[...state, {
                 charName: bookedItems.charName,
                 comicName: bookedItems.comicName,
@@ -61,7 +54,6 @@ export const bookReducer = (state:State, action:any) => {
                 isBooked: bookedItems.isBooked
             }];
         case "REMOVE_BOOK":
-            console.log("222222222222",bookedItems)
             return state.filter(element => element.comicID !== bookedItems.comicID);
     
         default:
@@ -90,7 +82,7 @@ export const ifClicked =(
 
 export const dispatchBook =(
         isBooked:boolean, 
-        comicItemsType:ComicItemsType,
+        comicItemsType:ComicBookType,
         onBooked:React.Dispatch<any>  
     )=>{
     let type = isBooked ? "ADD_BOOK" : "REMOVE_BOOK";

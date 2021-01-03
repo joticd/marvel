@@ -1,35 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import {ComicBookType} from './Interfaces';
 import {starClick, ifClicked, dispatchBook} from '../functions/Functions';
 
-// interface ComicItemsType {
-//     charName:string,
-//     comicName:string,
-//     comicImage:string,
-//     comicID:number,
-//     isBooked:boolean
-// }
-
 interface Props {
-    charName:string,
-    coomicBooked:boolean,
-    comicItems: {
-        comicName:string,
-        comicImage:string,
-        comicID:number
-    },
+    comicItems:ComicBookType,
     onBooked:React.Dispatch<any>    
 }
 
-const Character : React.FC<Props> = ({charName, coomicBooked, comicItems, onBooked}) =>{
+const Character : React.FC<Props> = ({comicItems, onBooked}) =>{
     const comicInfo = {
-        charName,
-        comicName:comicItems.comicName,
-        comicImage:comicItems.comicImage,
-        comicID:comicItems.comicID,
-        isBooked:coomicBooked
+        charName : comicItems.charName,
+        comicName : comicItems.comicName,
+        comicImage : comicItems.comicImage,
+        comicID : comicItems.comicID,
+        isBooked : comicItems.isBooked
     };
 
-    const [bookedBool, setBookedBool] = useState<boolean>(coomicBooked);
+    const [bookedBool, setBookedBool] = useState<boolean>(comicInfo.isBooked);
     const [isClicked, setIsClicked] = useState<boolean>(false);
 
     useEffect(()=>{        
@@ -47,18 +34,18 @@ const Character : React.FC<Props> = ({charName, coomicBooked, comicItems, onBook
         <div className="sixteen wide mobile eight wide tablet four wide computer column">
             <div className="ui card">
                 <div className="image">
-                    <img src={comicItems.comicImage} alt=""/>
+                    <img src={comicInfo.comicImage} alt=""/>
                 </div>
                 <div className="content">
                     <div className="meta">
                         <span className="date">Name</span>
                     </div>
-                    <div className="header">{charName}</div>
+                    <div className="header">{comicInfo.charName}</div>
                     <div className="description">
                         <div className="meta">
                             <span className="date">Title</span>
                         </div>
-                        {comicItems.comicName}
+                        {comicInfo.comicName}
                     </div>
                 </div>
                 <div className="extra content">
