@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import { bookReducer, updateResults } from '../functions/Functions';
-import Character from './Character';
+import Character from './Comic';
 import {ComicItems, ComicType, ComicBookType} from './Interfaces';
 
 type Props = {
