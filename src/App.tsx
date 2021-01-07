@@ -7,10 +7,12 @@ import {ComicType} from './components/Interfaces';
 
 const App : React.FC = () =>{  
 const [results, setResults] = useState<ComicType | null>(null);
+const [loader, setLoader] = useState<boolean>(false);
+
 return <div className="ui container">
     <Header />
-    <SearchBar onChangeTerm = {setResults} />
-    <CharacterList results = {results } />
+    <SearchBar onChangeTerm = {setResults} onChangeLoader={setLoader} />
+    <CharacterList results = {results } loader = {loader } />
   </div>
 }
 

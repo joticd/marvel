@@ -1,3 +1,4 @@
+import './Comic.css';
 import React, { useEffect, useState } from 'react';
 import {ComicBookType} from './Interfaces';
 import {starClick, ifClicked, dispatchBook} from '../functions/Functions';
@@ -32,7 +33,7 @@ const Character : React.FC<Props> = ({comicItems, onBooked}) =>{
     },[isClicked]);
     return (
         <div className="sixteen wide mobile eight wide tablet four wide computer column">
-            <div className="ui card">
+            <div className="ui card single-card">
                 <div className="image">
                     <img src={comicInfo.comicImage} alt=""/>
                 </div>

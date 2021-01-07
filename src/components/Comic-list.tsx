@@ -4,10 +4,9 @@ import Character from './Comic';
 import {ComicItems, ComicType, ComicBookType} from './Interfaces';
 
 type Props = {
-    results : ComicType | null
+    results : ComicType | null,
+    loader: boolean
 }
-
-type State = ComicBookType[] | [];
 
 const getCard = (comicItems:ComicBookType[], setBookedItem:React.Dispatch<React.SetStateAction<ComicBookType | null>>): JSX.Element[]=> {  
   const cards = comicItems.map(element => {      
@@ -16,7 +15,7 @@ const getCard = (comicItems:ComicBookType[], setBookedItem:React.Dispatch<React.
   
   return cards;
 }
-const CharacterList : React.FC<Props | null> = ({results}) =>{
+const CharacterList : React.FC<Props | null> = ({results, loader}) =>{
 
     const [bookedItems, dispatch] = useReducer(bookReducer, [], ()=>{
       const comicBooked = localStorage.getItem('comics');
@@ -30,11 +29,11 @@ const CharacterList : React.FC<Props | null> = ({results}) =>{
       
     }, [bookedItems]);
 
-    let newResults = updateResults(results, bookedItems);
+    let newResults = updateResults(results, bookedItems);    
     const card = newResults ? getCard(newResults, dispatch) : null;
     
     return <div>
-        CharacterList
+        <div className={`ui huge ${loader ? "active" : "disable"} centered inline loader`}></div>
         <div className="ui stackable grid">          
           {card}          
         </div>
