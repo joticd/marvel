@@ -1,9 +1,9 @@
-import './App.css';
 import React, { useState } from 'react';
+import './App.css';
 import CharacterList from './components/Comic-list';
-import SearchBar from './components/Search';
 import Header from './components/Header';
-import {ComicType} from './components/Interfaces';
+import { ComicType } from './components/Interfaces';
+import SearchBar from './components/SearchBar';
 
 const App : React.FC = () =>{  
 const [results, setResults] = useState<ComicType | null>(null);
